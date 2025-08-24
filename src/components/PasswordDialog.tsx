@@ -55,7 +55,7 @@ export function PasswordDialog({
     password: '',
     url: '',
     notes: '',
-    category_id: '',
+    category_id: 'none',
     is_favorite: false,
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -69,7 +69,7 @@ export function PasswordDialog({
         password: password.encrypted_password,
         url: password.url || '',
         notes: password.notes || '',
-        category_id: password.category_id || '',
+        category_id: password.category_id || 'none',
         is_favorite: password.is_favorite,
       });
     } else {
@@ -79,7 +79,7 @@ export function PasswordDialog({
         password: '',
         url: '',
         notes: '',
-        category_id: '',
+        category_id: 'none',
         is_favorite: false,
       });
     }
@@ -106,7 +106,7 @@ export function PasswordDialog({
         encrypted_password: formData.password,
         url: formData.url || null,
         notes: formData.notes || null,
-        category_id: formData.category_id || null,
+        category_id: formData.category_id === 'none' ? null : formData.category_id || null,
         is_favorite: formData.is_favorite,
         user_id: (await supabase.auth.getUser()).data.user?.id
       };
@@ -239,7 +239,7 @@ export function PasswordDialog({
                 <SelectValue placeholder="Kategorie auswählen" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Keine Kategorie</SelectItem>
+                <SelectItem value="none">Keine Kategorie</SelectItem>
                 {categories.map((category) => (
                   <SelectItem key={category.id} value={category.id}>
                     {category.name}
