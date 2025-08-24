@@ -24,6 +24,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { PasswordDialog } from '@/components/PasswordDialog';
 import { CategoryDialog } from '@/components/CategoryDialog';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface Category {
   id: string;
@@ -241,7 +242,8 @@ export default function Dashboard() {
               <p className="text-sm text-muted-foreground">Willkommen, {user?.user_metadata?.username || user?.email}</p>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2">
+              <ThemeToggle />
             <Button variant="ghost" size="sm" onClick={() => navigate('/admin')}>
               <Settings className="w-4 h-4" />
             </Button>

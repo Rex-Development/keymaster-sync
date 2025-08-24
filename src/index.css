@@ -47,8 +47,13 @@ All colors MUST be HSL.
     
     --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.1);
     --shadow-card: 0 4px 12px -2px hsl(215 25% 27% / 0.08);
+    --shadow-dialog: 0 25px 50px -12px hsl(215 25% 27% / 0.15);
+    
+    /* Overlay tokens */
+    --overlay: 215 25% 27%;
+    --overlay-opacity: 0.6;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -107,6 +112,12 @@ All colors MUST be HSL.
     
     --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.2);
     --shadow-card: 0 4px 12px -2px hsl(215 28% 10% / 0.3);
+    --shadow-dialog: 0 25px 50px -12px hsl(0 0% 0% / 0.5);
+    
+    /* Dark overlay tokens */
+    --overlay: 0 0% 0%;
+    --overlay-opacity: 0.8;
+    
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -124,6 +135,30 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
+  }
+}
+
+@layer components {
+  .overlay-blur {
+    @apply fixed inset-0 z-50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0;
+    background-color: hsl(var(--overlay) / var(--overlay-opacity));
+  }
+  
+  .dialog-enhanced {
+    @apply fixed left-[50%] top-[50%] z-50 w-full max-w-lg translate-x-[-50%] translate-y-[-50%] border bg-card text-card-foreground p-8 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-2xl;
+    box-shadow: var(--shadow-dialog);
+  }
+  
+  .form-section {
+    @apply space-y-3;
+  }
+  
+  .form-label {
+    @apply text-sm font-semibold text-foreground flex items-center gap-2;
+  }
+  
+  .form-description {
+    @apply text-xs text-muted-foreground mt-1;
   }
 }

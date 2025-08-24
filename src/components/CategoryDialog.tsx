@@ -135,95 +135,121 @@ export function CategoryDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
-          <DialogTitle>Kategorien verwalten</DialogTitle>
-          <DialogDescription>
-            Erstellen und verwalten Sie Kategorien für Ihre Passwörter.
+      <DialogContent className="dialog-enhanced sm:max-w-[650px] max-h-[80vh] overflow-y-auto">
+        <DialogHeader className="text-center pb-6">
+          <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            🏷️ Kategorien verwalten
+          </DialogTitle>
+          <DialogDescription className="text-base text-muted-foreground mt-2">
+            Organisieren Sie Ihre Passwörter mit benutzerdefinierten Kategorien
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-8">
           {/* Create New Category */}
-          <Card>
-            <CardContent className="p-4">
-              <h3 className="font-semibold mb-4">Neue Kategorie erstellen</h3>
-              <form onSubmit={handleCreateCategory} className="space-y-4">
-                <div className="flex gap-4">
-                  <div className="flex-1">
-                    <Label htmlFor="category-name">Name</Label>
-                    <Input
-                      id="category-name"
-                      placeholder="Kategorie-Name"
-                      value={newCategory.name}
-                      onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="w-32">
-                    <Label htmlFor="category-color">Farbe</Label>
-                    <div className="flex gap-1 flex-wrap">
-                      {DEFAULT_COLORS.map((color) => (
-                        <button
-                          key={color}
-                          type="button"
-                          className={`w-6 h-6 rounded border-2 ${
-                            newCategory.color === color ? 'border-foreground' : 'border-transparent'
-                          }`}
-                          style={{ backgroundColor: color }}
-                          onClick={() => setNewCategory({ ...newCategory, color })}
-                        />
-                      ))}
+          <div className="form-section">
+            <div className="form-label">
+              ✨ Neue Kategorie erstellen
+            </div>
+            <Card className="border-2 border-dashed border-muted-foreground/20 hover:border-primary/50 transition-colors">
+              <CardContent className="p-6">
+                <form onSubmit={handleCreateCategory} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="md:col-span-2">
+                      <Label htmlFor="category-name" className="text-sm font-medium">Name der Kategorie</Label>
+                      <Input
+                        id="category-name"
+                        placeholder="z.B. Banking, Social Media, Arbeit..."
+                        value={newCategory.name}
+                        onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+                        required
+                        className="mt-1"
+                      />
+                      <p className="form-description">Wählen Sie einen beschreibenden Namen</p>
+                    </div>
+                    <div>
+                      <Label className="text-sm font-medium">Farbe auswählen</Label>
+                      <div className="grid grid-cols-4 gap-2 mt-2">
+                        {DEFAULT_COLORS.map((color) => (
+                          <button
+                            key={color}
+                            type="button"
+                            className={`w-8 h-8 rounded-lg border-2 hover:scale-110 transition-transform ${
+                              newCategory.color === color 
+                                ? 'border-foreground ring-2 ring-offset-2 ring-primary' 
+                                : 'border-border hover:border-foreground'
+                            }`}
+                            style={{ backgroundColor: color }}
+                            onClick={() => setNewCategory({ ...newCategory, color })}
+                            title={color}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <Button type="submit" disabled={isLoading}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  {isLoading ? 'Erstellen...' : 'Kategorie erstellen'}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+                  <Button 
+                    type="submit" 
+                    disabled={isLoading}
+                    className="w-full bg-gradient-to-r from-primary to-accent"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    {isLoading ? 'Wird erstellt...' : '🎯 Kategorie erstellen'}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
 
           {/* Existing Categories */}
-          <div>
-            <h3 className="font-semibold mb-4">Vorhandene Kategorien</h3>
-            <div className="space-y-2 max-h-60 overflow-y-auto">
+          <div className="form-section">
+            <div className="form-label">
+              📂 Vorhandene Kategorien ({categories.length})
+            </div>
+            <div className="space-y-3 max-h-80 overflow-y-auto pr-2">
               {categories.length === 0 ? (
-                <p className="text-muted-foreground text-center py-4">
-                  Noch keine Kategorien erstellt.
-                </p>
+                <div className="text-center py-12 text-muted-foreground">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-muted/50 rounded-full flex items-center justify-center">
+                    🏷️
+                  </div>
+                  <p className="text-lg font-medium mb-2">Noch keine Kategorien</p>
+                  <p className="text-sm">Erstellen Sie Ihre erste Kategorie oben</p>
+                </div>
               ) : (
                 categories.map((cat) => (
-                  <div
-                    key={cat.id}
-                    className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-4 h-4 rounded"
-                        style={{ backgroundColor: cat.color }}
-                      />
-                      <span className="font-medium">{cat.name}</span>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleDeleteCategory(cat.id)}
-                      className="text-destructive hover:text-destructive"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
+                  <Card key={cat.id} className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div
+                            className="w-6 h-6 rounded-lg shadow-sm border border-white/20"
+                            style={{ backgroundColor: cat.color }}
+                          />
+                          <div>
+                            <span className="font-semibold text-foreground">{cat.name}</span>
+                            <p className="text-xs text-muted-foreground mt-1">Kategorie</p>
+                          </div>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteCategory(cat.id)}
+                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                          title="Kategorie löschen"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
                 ))
               )}
             </div>
           </div>
         </div>
 
-        <div className="flex justify-end pt-4">
-          <Button onClick={() => onOpenChange(false)}>
-            Schließen
+        <div className="flex justify-end pt-6 border-t">
+          <Button onClick={() => onOpenChange(false)} className="px-6">
+            ✅ Fertig
           </Button>
         </div>
       </DialogContent>
