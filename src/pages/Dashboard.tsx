@@ -242,8 +242,8 @@ export default function Dashboard() {
               <p className="text-sm text-muted-foreground">Willkommen, {user?.user_metadata?.username || user?.email}</p>
             </div>
           </div>
-            <div className="flex items-center space-x-2">
-              <ThemeToggle />
+          <div className="flex items-center space-x-2">
+            <ThemeToggle />
             <Button variant="ghost" size="sm" onClick={() => navigate('/admin')}>
               <Settings className="w-4 h-4" />
             </Button>
@@ -254,79 +254,98 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <div className="container mx-auto px-6 py-8 max-w-7xl">
-        {/* Quick Actions Section */}
-        <Card className="mb-8 bg-gradient-to-r from-card to-muted/30 border-0 shadow-lg">
-          <CardContent className="p-6">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-accent rounded-xl flex items-center justify-center shadow-lg">
-                  <Shield className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                    Passwort Master
-                  </h2>
-                  <p className="text-muted-foreground">
-                    Verwalten Sie Ihre {passwords.length} gespeicherten Passwörter
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setIsCategoryDialogOpen(true)}
-                  className="shadow-sm"
-                >
-                  <Folder className="w-4 h-4 mr-2" />
-                  Kategorien verwalten
-                </Button>
-                <Button 
-                  onClick={() => setIsPasswordDialogOpen(true)}
-                  className="bg-gradient-primary hover:opacity-90 shadow-lg"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Passwort hinzufügen
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="container mx-auto px-6 py-8 max-w-6xl">
+        {/* Welcome Header - Super prominent */}
+        <div className="text-center mb-12">
+          <div className="w-20 h-20 bg-gradient-accent rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
+            <Shield className="w-10 h-10 text-white" />
+          </div>
+          <h1 className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-3">
+            Passwort Master
+          </h1>
+          <p className="text-xl text-muted-foreground mb-6">
+            Alle deine Passwörter sicher an einem Ort
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button 
+              onClick={() => setIsPasswordDialogOpen(true)}
+              size="lg"
+              className="bg-gradient-primary hover:opacity-90 shadow-xl text-lg px-8 py-4 h-auto"
+            >
+              <Plus className="w-6 h-6 mr-3" />
+              Neues Passwort speichern
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={() => setIsCategoryDialogOpen(true)}
+              size="lg"
+              className="shadow-lg text-lg px-8 py-4 h-auto"
+            >
+              <Folder className="w-6 h-6 mr-3" />
+              Ordner verwalten
+            </Button>
+          </div>
+        </div>
 
-        {/* Search & Filter Section */}
-        <Card className="mb-8 shadow-sm">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <Card className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200 dark:border-blue-800">
+            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">{passwords.length}</div>
+            <div className="text-blue-700 dark:text-blue-300 font-medium">Gespeicherte Passwörter</div>
+          </Card>
+          <Card className="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-200 dark:border-green-800">
+            <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">{categories.length}</div>
+            <div className="text-green-700 dark:text-green-300 font-medium">Ordner erstellt</div>
+          </Card>
+          <Card className="text-center p-6 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border-purple-200 dark:border-purple-800">
+            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">{passwords.filter(p => p.is_favorite).length}</div>
+            <div className="text-purple-700 dark:text-purple-300 font-medium">Favoriten</div>
+          </Card>
+        </div>
+
+        {/* Search Section - Big and Clear */}
+        <Card className="mb-8 shadow-lg">
           <CardHeader className="pb-4">
-            <div className="flex items-center gap-2">
-              <Search className="w-5 h-5 text-primary" />
-              <CardTitle className="text-lg">Suchen & Filtern</CardTitle>
-            </div>
+            <CardTitle className="text-2xl flex items-center gap-3">
+              <Search className="w-7 h-7 text-primary" />
+              Passwort suchen
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Search Bar */}
-            <div className="relative">
-              <Search className="absolute left-4 top-3.5 h-4 w-4 text-muted-foreground" />
+          <CardContent>
+            <div className="relative mb-6">
+              <Search className="absolute left-6 top-5 h-6 w-6 text-muted-foreground" />
               <Input
-                placeholder="Nach Titel, Benutzername oder Website suchen..."
-                className="pl-12 h-12 text-base bg-muted/30 border-muted focus:bg-background transition-colors"
+                placeholder="Einfach hier tippen um zu suchen..."
+                className="pl-16 h-14 text-lg bg-muted/30 border-2 focus:bg-background transition-colors rounded-xl"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
+              {searchTerm && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-4 top-3 text-muted-foreground hover:text-foreground"
+                >
+                  ✕ Löschen
+                </Button>
+              )}
             </div>
             
-            {/* Category Filter */}
+            {/* Category Buttons - Big and Colorful */}
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <Filter className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm font-medium text-muted-foreground">Nach Kategorie filtern:</span>
+              <div className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <Folder className="w-5 h-5" />
+                Nach Ordner filtern:
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-3">
                 <Button
                   variant={selectedCategory === null ? "default" : "outline"}
-                  size="sm"
+                  size="lg"
                   onClick={() => setSelectedCategory(null)}
-                  className="rounded-full"
+                  className="rounded-full px-6 py-3 text-base font-medium"
                 >
-                  Alle ({passwords.length})
+                  📁 Alle ({passwords.length})
                 </Button>
                 {categories.map((category) => {
                   const count = passwords.filter(p => p.category_id === category.id).length;
@@ -334,15 +353,16 @@ export default function Dashboard() {
                     <Button
                       key={category.id}
                       variant={selectedCategory === category.id ? "default" : "outline"}
-                      size="sm"
+                      size="lg"
                       onClick={() => setSelectedCategory(category.id)}
-                      className="rounded-full"
+                      className="rounded-full px-6 py-3 text-base font-medium"
                       style={{ 
-                        borderColor: selectedCategory === category.id ? category.color : undefined,
-                        backgroundColor: selectedCategory === category.id ? category.color : undefined 
+                        borderColor: category.color,
+                        backgroundColor: selectedCategory === category.id ? category.color : undefined,
+                        color: selectedCategory === category.id ? 'white' : undefined
                       }}
                     >
-                      {category.name} ({count})
+                      📂 {category.name} ({count})
                     </Button>
                   );
                 })}
@@ -351,127 +371,119 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Results Section */}
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h3 className="text-lg font-semibold">Ihre Passwörter</h3>
-            <Badge variant="secondary" className="px-3 py-1">
+        {/* Results Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <h2 className="text-2xl font-bold">Deine Passwörter</h2>
+            <Badge variant="secondary" className="px-4 py-2 text-base">
               {filteredPasswords.length} gefunden
             </Badge>
           </div>
-          {searchTerm && (
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => setSearchTerm('')}
-              className="text-muted-foreground hover:text-foreground"
-            >
-              Filter zurücksetzen
-            </Button>
-          )}
         </div>
 
-        {/* Password Grid */}
-        <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
+        {/* Password Cards - Extra Simple */}
+        <div className="space-y-6">
           {filteredPasswords.map((password) => (
-            <Card key={password.id} className="group hover:shadow-elegant transition-all duration-300 hover:-translate-y-1 bg-gradient-card border-0">
-              <CardContent className="p-6">
-                {/* Header */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h4 className="font-semibold text-foreground truncate">{password.title}</h4>
-                      {password.is_favorite && (
-                        <Star className="w-4 h-4 text-yellow-500 fill-current flex-shrink-0" />
+            <Card key={password.id} className="group hover:shadow-2xl transition-all duration-300 border-2 hover:border-primary/20 bg-gradient-card">
+              <CardContent className="p-8">
+                {/* Header Row */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-accent rounded-xl flex items-center justify-center shadow-lg">
+                      <Shield className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-foreground mb-1">{password.title}</h3>
+                      {password.categories && (
+                        <Badge 
+                          className="text-sm px-3 py-1 rounded-full font-medium"
+                          style={{ 
+                            backgroundColor: password.categories.color + '20',
+                            borderColor: password.categories.color,
+                            color: password.categories.color 
+                          }}
+                        >
+                          📂 {password.categories.name}
+                        </Badge>
                       )}
                     </div>
-                    {password.categories && (
-                      <Badge 
-                        variant="outline" 
-                        className="text-xs rounded-full"
-                        style={{ 
-                          borderColor: password.categories.color,
-                          color: password.categories.color 
-                        }}
-                      >
-                        {password.categories.name}
-                      </Badge>
-                    )}
                   </div>
                   
-                  {/* Quick Actions */}
-                  <div className="flex opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => toggleFavorite(password)}
-                      className="h-8 w-8 p-0"
-                    >
-                      <Star className={`w-4 h-4 ${password.is_favorite ? 'text-yellow-500 fill-current' : 'text-muted-foreground'}`} />
-                    </Button>
-                  </div>
+                  {/* Favorite Star */}
+                  <Button
+                    variant="ghost"
+                    size="lg"
+                    onClick={() => toggleFavorite(password)}
+                    className="w-12 h-12 rounded-full"
+                  >
+                    <Star className={`w-8 h-8 ${password.is_favorite ? 'text-yellow-500 fill-current' : 'text-muted-foreground'}`} />
+                  </Button>
                 </div>
                 
-                {/* Details */}
-                <div className="space-y-3">
+                {/* Info Sections */}
+                <div className="grid gap-4 mb-6">
                   {password.username && (
-                    <div className="flex items-center justify-between gap-2 p-2 bg-muted/50 rounded-lg">
-                      <div className="flex-1 min-w-0">
-                        <div className="text-xs text-muted-foreground mb-1">Benutzername</div>
-                        <div className="font-mono text-sm truncate">{password.username}</div>
+                    <div className="p-4 bg-muted/50 rounded-xl border-2 border-muted">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="text-sm font-medium text-muted-foreground mb-2">👤 Benutzername</div>
+                          <div className="text-xl font-mono font-bold">{password.username}</div>
+                        </div>
+                        <Button 
+                          size="lg"
+                          onClick={() => copyToClipboard(password.username, 'Benutzername')}
+                          className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg"
+                        >
+                          <Copy className="w-5 h-5 mr-2" />
+                          Kopieren
+                        </Button>
                       </div>
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        className="h-8 w-8 p-0 flex-shrink-0"
-                        onClick={() => copyToClipboard(password.username, 'Benutzername')}
-                      >
-                        <Copy className="w-3 h-3" />
-                      </Button>
                     </div>
                   )}
                   
-                  <div className="flex items-center justify-between gap-2 p-2 bg-muted/50 rounded-lg">
-                    <div className="flex-1 min-w-0">
-                      <div className="text-xs text-muted-foreground mb-1">Passwort</div>
-                      <div className="font-mono text-sm">
-                        {visiblePasswords.has(password.id) 
-                          ? password.encrypted_password 
-                          : '••••••••••••'
-                        }
+                  <div className="p-4 bg-muted/50 rounded-xl border-2 border-muted">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-muted-foreground mb-2">🔒 Passwort</div>
+                        <div className="text-xl font-mono font-bold">
+                          {visiblePasswords.has(password.id) 
+                            ? password.encrypted_password 
+                            : '••••••••••••••••'
+                          }
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex gap-1 flex-shrink-0">
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        className="h-8 w-8 p-0"
-                        onClick={() => togglePasswordVisibility(password.id)}
-                      >
-                        {visiblePasswords.has(password.id) ? 
-                          <EyeOff className="w-3 h-3" /> : 
-                          <Eye className="w-3 h-3" />
-                        }
-                      </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        className="h-8 w-8 p-0"
-                        onClick={() => copyToClipboard(password.encrypted_password, 'Passwort')}
-                      >
-                        <Copy className="w-3 h-3" />
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline"
+                          size="lg"
+                          onClick={() => togglePasswordVisibility(password.id)}
+                          className="px-6 py-3 rounded-xl"
+                        >
+                          {visiblePasswords.has(password.id) ? 
+                            <><EyeOff className="w-5 h-5 mr-2" />Verstecken</> : 
+                            <><Eye className="w-5 h-5 mr-2" />Anzeigen</>
+                          }
+                        </Button>
+                        <Button 
+                          size="lg"
+                          onClick={() => copyToClipboard(password.encrypted_password, 'Passwort')}
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg"
+                        >
+                          <Copy className="w-5 h-5 mr-2" />
+                          Kopieren
+                        </Button>
+                      </div>
                     </div>
                   </div>
                   
                   {password.url && (
-                    <div className="p-2 bg-muted/50 rounded-lg">
-                      <div className="text-xs text-muted-foreground mb-1">Website</div>
+                    <div className="p-4 bg-muted/50 rounded-xl border-2 border-muted">
+                      <div className="text-sm font-medium text-muted-foreground mb-2">🌐 Website</div>
                       <a 
                         href={password.url.startsWith('http') ? password.url : `https://${password.url}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="text-primary hover:underline text-sm truncate block"
+                        className="text-xl text-primary hover:underline font-medium"
                       >
                         {password.url}
                       </a>
@@ -480,26 +492,27 @@ export default function Dashboard() {
                 </div>
                 
                 {/* Action Buttons */}
-                <div className="flex gap-2 mt-4 pt-4 border-t border-muted/50">
+                <div className="flex gap-4 pt-6 border-t-2 border-muted">
                   <Button
                     variant="outline"
-                    size="sm"
+                    size="lg"
                     onClick={() => {
                       setEditingPassword(password);
                       setIsPasswordDialogOpen(true);
                     }}
-                    className="flex-1"
+                    className="flex-1 py-4 text-lg rounded-xl border-2"
                   >
-                    <Edit className="w-3 h-3 mr-2" />
+                    <Edit className="w-5 h-5 mr-3" />
                     Bearbeiten
                   </Button>
                   <Button
                     variant="outline"
-                    size="sm"
+                    size="lg"
                     onClick={() => deletePassword(password.id)}
-                    className="text-destructive hover:text-destructive-foreground hover:bg-destructive"
+                    className="py-4 px-6 text-lg rounded-xl border-2 text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-900/20"
                   >
-                    <Trash2 className="w-3 h-3" />
+                    <Trash2 className="w-5 h-5 mr-2" />
+                    Löschen
                   </Button>
                 </div>
               </CardContent>
@@ -507,29 +520,38 @@ export default function Dashboard() {
           ))}
         </div>
           
-        {/* Empty State */}
+        {/* Empty State - Super Clear */}
         {filteredPasswords.length === 0 && (
-          <Card className="shadow-sm">
-            <CardContent className="p-12 text-center">
-              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-6">
-                <Shield className="w-8 h-8 text-muted-foreground" />
+          <Card className="shadow-xl border-2 border-dashed border-muted">
+            <CardContent className="p-16 text-center">
+              <div className="w-24 h-24 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-8">
+                <Shield className="w-12 h-12 text-muted-foreground" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">
-                {searchTerm ? 'Keine Ergebnisse gefunden' : 'Noch keine Passwörter'}
+              <h3 className="text-3xl font-bold mb-4">
+                {searchTerm ? '🔍 Nichts gefunden!' : '📝 Noch keine Passwörter!'}
               </h3>
-              <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+              <p className="text-xl text-muted-foreground mb-8 max-w-md mx-auto leading-relaxed">
                 {searchTerm 
-                  ? 'Versuchen Sie einen anderen Suchbegriff oder überprüfen Sie Ihre Filter.' 
-                  : 'Fügen Sie Ihr erstes Passwort hinzu, um die Verwaltung zu beginnen.'
+                  ? 'Probier einen anderen Suchbegriff oder schau in einem anderen Ordner.' 
+                  : 'Leg einfach los und speichere dein erstes Passwort. Es ist super einfach!'
                 }
               </p>
               {searchTerm ? (
-                <Button variant="outline" onClick={() => setSearchTerm('')}>
-                  Filter zurücksetzen
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  onClick={() => setSearchTerm('')}
+                  className="px-8 py-4 text-lg rounded-xl"
+                >
+                  🔄 Suche zurücksetzen
                 </Button>
               ) : (
-                <Button onClick={() => setIsPasswordDialogOpen(true)} className="bg-gradient-primary">
-                  <Plus className="w-4 h-4 mr-2" />
+                <Button 
+                  onClick={() => setIsPasswordDialogOpen(true)} 
+                  size="lg"
+                  className="bg-gradient-primary px-10 py-6 text-xl rounded-xl shadow-xl"
+                >
+                  <Plus className="w-6 h-6 mr-3" />
                   Erstes Passwort hinzufügen
                 </Button>
               )}

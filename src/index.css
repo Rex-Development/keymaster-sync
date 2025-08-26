@@ -160,7 +160,7 @@ All colors MUST be HSL.
     @apply text-sm font-semibold text-foreground flex items-center gap-2;
   }
   
-  .form-description {
-    @apply text-xs text-muted-foreground mt-1;
+  .bg-gradient-accent {
+    background: var(--gradient-accent);
   }
 }
