@@ -287,89 +287,18 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <Card className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200 dark:border-blue-800">
-            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">{passwords.length}</div>
-            <div className="text-blue-700 dark:text-blue-300 font-medium">Gespeicherte Passwörter</div>
-          </Card>
-          <Card className="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-200 dark:border-green-800">
-            <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">{categories.length}</div>
-            <div className="text-green-700 dark:text-green-300 font-medium">Ordner erstellt</div>
-          </Card>
-          <Card className="text-center p-6 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border-purple-200 dark:border-purple-800">
-            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">{passwords.filter(p => p.is_favorite).length}</div>
-            <div className="text-purple-700 dark:text-purple-300 font-medium">Favoriten</div>
-          </Card>
+        {/* Simple Search */}
+        <div className="mb-8">
+          <div className="relative">
+            <Search className="absolute left-4 top-4 h-5 w-5 text-muted-foreground" />
+            <Input
+              placeholder="Passwort suchen..."
+              className="pl-12 h-12 text-lg rounded-xl"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
-
-        {/* Search Section - Big and Clear */}
-        <Card className="mb-8 shadow-lg">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-2xl flex items-center gap-3">
-              <Search className="w-7 h-7 text-primary" />
-              Passwort suchen
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="relative mb-6">
-              <Search className="absolute left-6 top-5 h-6 w-6 text-muted-foreground" />
-              <Input
-                placeholder="Einfach hier tippen um zu suchen..."
-                className="pl-16 h-14 text-lg bg-muted/30 border-2 focus:bg-background transition-colors rounded-xl"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              {searchTerm && (
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={() => setSearchTerm('')}
-                  className="absolute right-4 top-3 text-muted-foreground hover:text-foreground"
-                >
-                  ✕ Löschen
-                </Button>
-              )}
-            </div>
-            
-            {/* Category Buttons - Big and Colorful */}
-            <div>
-              <div className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Folder className="w-5 h-5" />
-                Nach Ordner filtern:
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <Button
-                  variant={selectedCategory === null ? "default" : "outline"}
-                  size="lg"
-                  onClick={() => setSelectedCategory(null)}
-                  className="rounded-full px-6 py-3 text-base font-medium"
-                >
-                  📁 Alle ({passwords.length})
-                </Button>
-                {categories.map((category) => {
-                  const count = passwords.filter(p => p.category_id === category.id).length;
-                  return (
-                    <Button
-                      key={category.id}
-                      variant={selectedCategory === category.id ? "default" : "outline"}
-                      size="lg"
-                      onClick={() => setSelectedCategory(category.id)}
-                      className="rounded-full px-6 py-3 text-base font-medium"
-                      style={{ 
-                        borderColor: category.color,
-                        backgroundColor: selectedCategory === category.id ? category.color : undefined,
-                        color: selectedCategory === category.id ? 'white' : undefined
-                      }}
-                    >
-                      📂 {category.name} ({count})
-                    </Button>
-                  );
-                })}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
         {/* Results Header */}
         <div className="flex items-center justify-between mb-6">
@@ -381,139 +310,58 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Password Cards - Extra Simple */}
-        <div className="space-y-6">
+        {/* Simple Password Cards */}
+        <div className="space-y-4">
           {filteredPasswords.map((password) => (
-            <Card key={password.id} className="group hover:shadow-2xl transition-all duration-300 border-2 hover:border-primary/20 bg-gradient-card">
-              <CardContent className="p-8">
-                {/* Header Row */}
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-gradient-accent rounded-xl flex items-center justify-center shadow-lg">
-                      <Shield className="w-6 h-6 text-white" />
-                    </div>
+            <Card key={password.id} className="hover:shadow-lg transition-shadow">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  {/* Title */}
+                  <div className="flex items-center gap-3">
+                    <Shield className="w-8 h-8 text-primary" />
                     <div>
-                      <h3 className="text-2xl font-bold text-foreground mb-1">{password.title}</h3>
-                      {password.categories && (
-                        <Badge 
-                          className="text-sm px-3 py-1 rounded-full font-medium"
-                          style={{ 
-                            backgroundColor: password.categories.color + '20',
-                            borderColor: password.categories.color,
-                            color: password.categories.color 
-                          }}
-                        >
-                          📂 {password.categories.name}
-                        </Badge>
+                      <h3 className="text-xl font-bold">{password.title}</h3>
+                      {password.username && (
+                        <p className="text-muted-foreground">{password.username}</p>
                       )}
                     </div>
                   </div>
                   
-                  {/* Favorite Star */}
-                  <Button
-                    variant="ghost"
-                    size="lg"
-                    onClick={() => toggleFavorite(password)}
-                    className="w-12 h-12 rounded-full"
-                  >
-                    <Star className={`w-8 h-8 ${password.is_favorite ? 'text-yellow-500 fill-current' : 'text-muted-foreground'}`} />
-                  </Button>
-                </div>
-                
-                {/* Info Sections */}
-                <div className="grid gap-4 mb-6">
-                  {password.username && (
-                    <div className="p-4 bg-muted/50 rounded-xl border-2 border-muted">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <div className="text-sm font-medium text-muted-foreground mb-2">👤 Benutzername</div>
-                          <div className="text-xl font-mono font-bold">{password.username}</div>
-                        </div>
-                        <Button 
-                          size="lg"
-                          onClick={() => copyToClipboard(password.username, 'Benutzername')}
-                          className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg"
-                        >
-                          <Copy className="w-5 h-5 mr-2" />
-                          Kopieren
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                  
-                  <div className="p-4 bg-muted/50 rounded-xl border-2 border-muted">
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <div className="text-sm font-medium text-muted-foreground mb-2">🔒 Passwort</div>
-                        <div className="text-xl font-mono font-bold">
-                          {visiblePasswords.has(password.id) 
-                            ? password.encrypted_password 
-                            : '••••••••••••••••'
-                          }
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button 
-                          variant="outline"
-                          size="lg"
-                          onClick={() => togglePasswordVisibility(password.id)}
-                          className="px-6 py-3 rounded-xl"
-                        >
-                          {visiblePasswords.has(password.id) ? 
-                            <><EyeOff className="w-5 h-5 mr-2" />Verstecken</> : 
-                            <><Eye className="w-5 h-5 mr-2" />Anzeigen</>
-                          }
-                        </Button>
-                        <Button 
-                          size="lg"
-                          onClick={() => copyToClipboard(password.encrypted_password, 'Passwort')}
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg"
-                        >
-                          <Copy className="w-5 h-5 mr-2" />
-                          Kopieren
-                        </Button>
-                      </div>
-                    </div>
+                  {/* Actions */}
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => togglePasswordVisibility(password.id)}
+                    >
+                      {visiblePasswords.has(password.id) ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyToClipboard(password.encrypted_password, 'Passwort')}
+                    >
+                      <Copy className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setEditingPassword(password);
+                        setIsPasswordDialogOpen(true);
+                      }}
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Button>
                   </div>
-                  
-                  {password.url && (
-                    <div className="p-4 bg-muted/50 rounded-xl border-2 border-muted">
-                      <div className="text-sm font-medium text-muted-foreground mb-2">🌐 Website</div>
-                      <a 
-                        href={password.url.startsWith('http') ? password.url : `https://${password.url}`} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-xl text-primary hover:underline font-medium"
-                      >
-                        {password.url}
-                      </a>
-                    </div>
-                  )}
                 </div>
                 
-                {/* Action Buttons */}
-                <div className="flex gap-4 pt-6 border-t-2 border-muted">
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    onClick={() => {
-                      setEditingPassword(password);
-                      setIsPasswordDialogOpen(true);
-                    }}
-                    className="flex-1 py-4 text-lg rounded-xl border-2"
-                  >
-                    <Edit className="w-5 h-5 mr-3" />
-                    Bearbeiten
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    onClick={() => deletePassword(password.id)}
-                    className="py-4 px-6 text-lg rounded-xl border-2 text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-900/20"
-                  >
-                    <Trash2 className="w-5 h-5 mr-2" />
-                    Löschen
-                  </Button>
+                {/* Password Display */}
+                <div className="mt-4 p-3 bg-muted rounded-lg font-mono">
+                  {visiblePasswords.has(password.id) 
+                    ? password.encrypted_password 
+                    : '••••••••••••••••'
+                  }
                 </div>
               </CardContent>
             </Card>
